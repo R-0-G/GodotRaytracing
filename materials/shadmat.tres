@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dd4xtjegjoumm"]
+
+[ext_resource type="Shader" path="res://scripts/shaders/Raytrace.gdshader" id="1_bksnj"]
+
+[resource]
+shader = ExtResource("1_bksnj")
+shader_parameter/viewParams = Vector3(0, 0, 0)
+shader_parameter/world_space_camera_pos = null
+shader_parameter/cam_local_world = null
+shader_parameter/max_bounds = null
+shader_parameter/min_bounds = null

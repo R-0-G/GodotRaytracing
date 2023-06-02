@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://cx228q1nfrov"]
+
+[ext_resource type="Script" path="res://scripts/ScreenShader.gd" id="1_flkgu"]
+[ext_resource type="Material" uid="uid://dd4xtjegjoumm" path="res://materials/shadmat.tres" id="2_133wf"]
+[ext_resource type="Script" path="res://scripts/MoveCamera.cs" id="2_l5c2i"]
+[ext_resource type="Texture2D" uid="uid://dvscwsirbutp6" path="res://Icon.svg" id="3_8y4oy"]
+[ext_resource type="Script" path="res://scripts/RaytraceManager.gd" id="5_euifv"]
+[ext_resource type="Script" path="res://scripts/Sphere.gd" id="6_a7t8k"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_xd256"]
+
+[node name="Node3D" type="Node3D" node_paths=PackedStringArray("tex_rect", "trg")]
+script = ExtResource("1_flkgu")
+tex_rect = NodePath("Control/TextureRect")
+trg = NodePath("RaycastManager/Sphere visualizer")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, -0.766044, 0, 0, 0)
+current = true
+fov = 90.0
+script = ExtResource("2_l5c2i")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+material = ExtResource("2_133wf")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_8y4oy")
+expand_mode = 1
+
+[node name="RaycastManager" type="Node3D" parent="." node_paths=PackedStringArray("tex_rect")]
+script = ExtResource("5_euifv")
+objects = Array[ExtResource("6_a7t8k")]([null])
+tex_rect = NodePath("../Control/TextureRect")
+
+[node name="Sphere visualizer" type="Node3D" parent="RaycastManager"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.700308, 1.36707, -3.0979)
+script = ExtResource("6_a7t8k")
+colour = Color(0.835294, 0.741176, 0.027451, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RaycastManager/Sphere visualizer"]
+mesh = SubResource("SphereMesh_xd256")
