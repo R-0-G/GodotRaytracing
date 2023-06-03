@@ -8,13 +8,22 @@ shader_type canvas_item;
 uniform vec4 viewParams;
 uniform vec4 world_space_camera_pos;
 uniform mat4 cam_local_world;
-uniform sampler2D sphere_locations; //each pixel is a sphere
-uniform sampler2D sphere_colours; 
-uniform sampler2D sphere_sizes;
-uniform vec3 max_bounds;
-uniform vec3 min_bounds;
+uniform vec3 sphere_locations[10]; 
+uniform vec3 sphere_colours[10]; 
+uniform vec3 sphere_emissions[10]; 
+uniform float sphere_emission_strs[10];
+uniform float sphere_sizes[10];
 uniform int sphere_count;
+uniform int max_bounce;
 
+struct Sphere
+{
+	vec3 pos;
+	float rad;
+	vec4 col;
+	vec3 emissionColour;
+	float emissionStrength;
+};
 
 struct Ray 
 {
@@ -28,21 +37,27 @@ struct HitInfo
 	float dst;
 	vec3 hitPoint;
 	vec3 normal;
+	vec4 colour;
+	vec3 emissionColour;
+	float emissionStrength;
 };
 
-HitInfo RaySphere(inout Ray ray, in vec3 sphereCenter, in float sphereRadius)
+HitInfo RaySphere(inout Ray ray, in Sphere sphere)
 {
 	HitInfo hitInfo;
 	hitInfo.didHit = false;
 	hitInfo.dst = 0.0;
 	hitInfo.hitPoint = vec3(0.0);
 	hitInfo.normal = vec3(0.0);
+	hitInfo.colour = vec4(1,0,0,1);
+	hitInfo.emissionColour = vec3(0);
+	hitInfo.emissionStrength = 0.0;
 	
-	vec3 offsetRayOrigin = ray.origin - sphereCenter;
+	vec3 offsetRayOrigin = ray.origin - sphere.pos;
 	
 	float a = dot(ray.dir, ray.dir);
 	float b = dot(offsetRayOrigin, ray.dir) * 2.0;
-	float c = dot(offsetRayOrigin, offsetRayOrigin) - sphereRadius * sphereRadius;
+	float c = dot(offsetRayOrigin, offsetRayOrigin) - sphere.rad * sphere.rad;
 	float discriminant = b*b-4.0*a*c;
 	
 	if (discriminant >= 0.0)
@@ -53,9 +68,14 @@ HitInfo RaySphere(inout Ray ray, in vec3 sphereCenter, in float sphereRadius)
 			hitInfo.didHit=true;
 			hitInfo.dst = dist;
 			hitInfo.hitPoint = ray.origin + ray.dir * dist;
-			hitInfo.normal = normalize(hitInfo.hitPoint - sphereCenter);
+			hitInfo.normal = normalize(hitInfo.hitPoint - sphere.pos);
+			hitInfo.colour = sphere.col;
+			hitInfo.emissionColour = sphere.emissionColour;
+			hitInfo.emissionStrength = sphere.emissionStrength;
+			
 		}
 	}
+	
 	return hitInfo;
 }
 
@@ -66,55 +86,106 @@ HitInfo RayCalc(inout Ray ray)
 	hitInfo.dst = 0.0;
 	hitInfo.hitPoint = vec3(0.0);
 	hitInfo.normal = vec3(0.0);
+	hitInfo.colour = vec4(1,0,0,1);
+	hitInfo.emissionColour = vec3(0);
+	hitInfo.emissionStrength = 0.0;
 	
 	for (int i = 0; i<sphere_count; i++)
 	{
-		vec3 pos = texture(sphere_locations, vec2(0, 0)).xyz;
-		pos.x = mix(min_bounds.x, max_bounds.x, pos.x);
-		pos.y = mix(min_bounds.y, max_bounds.y, pos.y);
-		pos.z = mix(min_bounds.z, max_bounds.z, pos.z);
+		vec3 pos = sphere_locations[i];
+		float rad = sphere_sizes[i];
+		vec4 col = vec4(sphere_colours[i], 1);
+		vec3 emi_col = sphere_emissions[i].rgb;
+		float emi_str = sphere_emission_strs[i];
+		Sphere sphere = Sphere(pos,rad,col, emi_col, emi_str);
 		
-		float rad = texture(sphere_sizes, vec2(0, 0)).x;
-		
-		HitInfo hi = RaySphere(ray, pos, rad);
+		HitInfo hi = RaySphere(ray, sphere);
 		
 		if (hi.dst < hitInfo.dst || hitInfo.didHit == false)
 		{
-			hitInfo = hi;
+			if (hi.didHit)
+			{
+				hitInfo = hi;
+			}
 		}
 	}
 	
 	return hitInfo;
 }
 
+float RandomValue(inout uint state)
+{
+	state = state * uint(747796405) + uint(2891336453);
+	uint result = ((state >> ((state >> uint(28)) + uint(4))) ^ state) * uint(277803737);
+	result = (result >> uint(22)) ^ result;
+	return float(result) / 4294967295.0;
+}
+
+float RandomValueNormalDistribution(inout uint state)
+{
+	float theta = 2.0 * 3.1415926 * RandomValue(state);
+	float rho = sqrt(-2.0 * log(RandomValue(state)));
+	return rho * cos(theta);
+}
+
+vec3 RandomDirection(inout uint state)
+{
+	float x = RandomValueNormalDistribution(state);
+	float y = RandomValueNormalDistribution(state);
+	float z = RandomValueNormalDistribution(state);
+	return normalize(vec3(x,y,z));
+}
 
 
-void fragment() {
+vec3 BounceRay(vec3 normal, uint rngState)
+{
+	vec3 dir = RandomDirection(rngState);
+	return dir * sign(dot(normal, dir));
+}
 
+vec3 Trace(Ray ray, inout uint rngState)
+{
+	vec3 incomingLight = vec3(0);
+	vec3 rayColour = vec3(1);
+	for (int i=0; i<= max_bounce; i++)
+	{
+		HitInfo hit = RayCalc(ray);
+		if (hit.didHit)
+		{
+			ray.origin = hit.hitPoint;
+			ray.dir = BounceRay(hit.normal, rngState);
+			vec3 emittedLight = hit.emissionColour * hit.emissionStrength;
+			incomingLight += emittedLight * rayColour;
+			rayColour *= hit.colour.rgb;
+		}
+		else
+		{
+			break;
+		}
+	}
+	return incomingLight;
+}
+
+
+
+void fragment() 
+{
+	vec2 pixelCoord = UV * SCREEN_PIXEL_SIZE;
+	uint pixelIndex = uint(pixelCoord.y * SCREEN_PIXEL_SIZE.x + pixelCoord.x);
+	uint rngState = pixelIndex;
+	
 	vec3 viewPointLocal = vec3((UV.x-0.5), (UV.y-0.5), 1.0)* viewParams.xyz; //gets the pixels location in local space
-
 	vec3 viewPoint = (vec4(viewPointLocal,1.0) * cam_local_world).xyz ; 
-	//viewPoint.b = -viewPoint.b; //this is literally the thing thats breaking everything we will figure this out when less tired
-
+	viewPoint.b = -viewPoint.b; //this is literally the thing thats breaking everything we will figure this out when less tired
+	viewPoint.g = -viewPoint.g;
+	
 	Ray ray;
 	ray.origin = world_space_camera_pos.xyz;
-	vec3 test = viewPoint-ray.origin; // if you think this isnt working in neg axis how could it display neg cols
-	ray.dir = normalize(test); //this shouldnt change with linear motion of cam
-	//COLOR = vec4((viewPoint), 1.0); 
-//	COLOR = vec4((ray.dir), 1.0); 
+	vec3 dir = viewPoint-ray.origin; // if you think this isnt working in neg axis how could it display neg cols
+	ray.dir = normalize(dir); //this shouldnt change with linear motion of cam
 	
-	HitInfo hit = RayCalc(ray);
-	if (hit.didHit)
-	{
-		//COLOR = vec4(vec3(hit.dst), 1);
-		COLOR = texture(sphere_colours, vec2(0, 0));
-	}
-	else
-	{
-		COLOR = vec4(vec3(0), 1);
-	}
-	
-	
-//	COLOR = vec4(normalize(viewPoint), 1);
+	vec3 pixelCol = Trace(ray, rngState);
+	COLOR = vec4(pixelCol, 1);
+
 }
 
