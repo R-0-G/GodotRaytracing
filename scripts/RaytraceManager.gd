@@ -50,5 +50,6 @@ func set_properties():
 			shadmat.set_shader_parameter("sphere_emissions", emi_colours)
 		
 		shadmat.set_shader_parameter("sphere_count", len(objects))
+		shadmat.set_shader_parameter("max_bounce", 4)
 		shadmat.set_shader_parameter("sphere_emission_strs", emi_strs)
 

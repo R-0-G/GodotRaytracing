@@ -146,8 +146,8 @@ vec3 BounceRay(vec3 normal, uint rngState)
 vec3 Trace(Ray ray, inout uint rngState)
 {
 	vec3 incomingLight = vec3(0);
-	vec3 rayColour = vec3(1);
-	for (int i=0; i<= max_bounce; i++)
+	vec3 rayColour = vec3(1, 1, 1);
+	for (int i=0; i< max_bounce; i++)
 	{
 		HitInfo hit = RayCalc(ray);
 		if (hit.didHit)
