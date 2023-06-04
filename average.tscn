@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://br7lob8wtm5r8"]
+
+[ext_resource type="Shader" path="res://scripts/shaders/Average.gdshader" id="1_2er7l"]
+[ext_resource type="Texture2D" uid="uid://cm3lksmaynry3" path="res://scenes/vignette.png" id="2_r38gg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c0vyx"]
+shader = ExtResource("1_2er7l")
+shader_parameter/blur_amount = 0.0
+
+[node name="Average" type="TextureRect"]
+visible = false
+material = SubResource("ShaderMaterial_c0vyx")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_r38gg")
+expand_mode = 1

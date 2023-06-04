@@ -1,9 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://cx228q1nfrov"]
+[gd_scene load_steps=15 format=3 uid="uid://cx228q1nfrov"]
 
 [ext_resource type="Script" path="res://scripts/ScreenShader.gd" id="1_flkgu"]
 [ext_resource type="Material" uid="uid://dd4xtjegjoumm" path="res://materials/shadmat.tres" id="2_133wf"]
 [ext_resource type="Script" path="res://scripts/MoveCamera.cs" id="2_l5c2i"]
-[ext_resource type="Texture2D" uid="uid://dvscwsirbutp6" path="res://Icon.svg" id="3_8y4oy"]
 [ext_resource type="Script" path="res://scripts/RaytraceManager.gd" id="5_euifv"]
 [ext_resource type="Script" path="res://scripts/Sphere.gd" id="6_a7t8k"]
 [ext_resource type="Material" uid="uid://ctn3g23e11qlo" path="res://materials/green_unlit.tres" id="7_mjt24"]
@@ -11,16 +10,29 @@
 [ext_resource type="Material" uid="uid://c1wlju4ea6pb" path="res://materials/blue_unlit.tres" id="9_4ichn"]
 [ext_resource type="Material" uid="uid://siww64pwxho4" path="res://materials/dark_blue_unlit.tres" id="9_p7iy8"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ywncf"]
+
+[sub_resource type="Sky" id="Sky_sv58l"]
+sky_material = SubResource("ProceduralSkyMaterial_ywncf")
+
+[sub_resource type="Environment" id="Environment_87fsj"]
+background_mode = 2
+background_energy_multiplier = 1.41
+sky = SubResource("Sky_sv58l")
+sky_custom_fov = 100.8
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_84l1n"]
+
 [sub_resource type="SphereMesh" id="SphereMesh_xd256"]
 material = ExtResource("8_mp00b")
 
 [node name="Node3D" type="Node3D" node_paths=PackedStringArray("tex_rect", "trg")]
 script = ExtResource("1_flkgu")
-tex_rect = NodePath("Control/TextureRect")
+tex_rect = NodePath("Control/Raytrace")
 trg = NodePath("RaycastManager/GreenSphere")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-current = true
+environment = SubResource("Environment_87fsj")
 fov = 90.0
 script = ExtResource("2_l5c2i")
 
@@ -32,7 +44,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="Control"]
+[node name="BackBufferCopy" type="BackBufferCopy" parent="Control"]
+position = Vector2(272, 339)
+copy_mode = 2
+
+[node name="Raytrace" type="TextureRect" parent="Control"]
 material = ExtResource("2_133wf")
 layout_mode = 1
 anchors_preset = 15
@@ -40,14 +56,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_8y4oy")
+texture = SubResource("CanvasTexture_84l1n")
 expand_mode = 1
 
 [node name="RaycastManager" type="Node3D" parent="." node_paths=PackedStringArray("tex_rect")]
 script = ExtResource("5_euifv")
-tex_rect = NodePath("../Control/TextureRect")
+tex_rect = NodePath("../Control/Raytrace")
 bounces = 4
-num_ray_per_pix = 100
+num_ray_per_pix = 50
 
 [node name="GreenSphere" type="Node3D" parent="RaycastManager" node_paths=PackedStringArray("mesh")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.100104, -0.183242, -1.55077)

@@ -3,8 +3,11 @@ extends Node
 #use 3d texture instead of this crap
 
 @export var tex_rect : TextureRect
+#@export var tex_rect2 : TextureRect
 @export var bounces : int
 @export var num_ray_per_pix : int
+
+var frame_count = 0
 
 var objects : Array[Node]
 var shadmat
@@ -19,7 +22,13 @@ func _ready():
 	calculate_properties()
 	set_properties()
 	
-#func _process(_delta):
+func _process(_delta):
+	shadmat.set_shader_parameter("frame_count", frame_count)
+	frame_count+=1
+#	tex_rect2.texture = tex_rect.texture
+#	pass
+	#get current texture on raycast texture
+	#
 #	calculate_properties()
 #	set_properties()
 	

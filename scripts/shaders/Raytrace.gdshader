@@ -9,6 +9,10 @@ shader_type canvas_item;
 uniform int max_bounce;
 uniform int num_ray_per_pix;
 uniform int sphere_count;
+uniform int frame_count;
+uniform sampler2D tex : hint_screen_texture;//, filter_linear_mipmap;
+
+
 
 MaterialHitInfo get_ray_hit(inout Ray ray)
 {
@@ -39,7 +43,7 @@ MaterialHitInfo get_ray_hit(inout Ray ray)
 }
 
 
-vec3 Trace(Ray ray, inout uint seed)
+vec3 get_ray_light(Ray ray, inout uint seed)
 {
 	vec3 incomingLight = vec3(0);
 	vec3 rayColour = vec3(1, 1, 1);
@@ -69,7 +73,7 @@ vec3 get_light(Ray ray, uint seed)
 
 	for (int i = 0; i<num_ray_per_pix; i++)
 	{
-		totalLight += Trace(ray, seed);
+		totalLight += get_ray_light(ray, seed);
 	}
 
 	return totalLight/float(num_ray_per_pix);
@@ -79,9 +83,23 @@ vec3 get_light(Ray ray, uint seed)
 
 void fragment() 
 {
+//	vec4 prev_col = textureLod(tex, SCREEN_UV, 0.0);
 	Ray ray = pixel_to_ray(UV);
 	uint seed = rand_seed(SCREEN_PIXEL_SIZE, UV);
 	vec3 light = get_light(ray, seed);
-	COLOR = vec4(light, 1.0);
+	
+//	if (frame_count < 100)
+	{
+		COLOR = vec4(light, 1.0);
+//	}
+//	else
+//	{
+//		COLOR = prev_col;
+//	}
+	
+//	float weight = 1.0 / float(frame_count+1);
+//	COLOR = prev_col * (1.0-weight) + vec4(light, 1.0) * weight;
+	
+	
 }
 
