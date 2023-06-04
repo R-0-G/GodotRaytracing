@@ -3,6 +3,8 @@ extends Node
 #use 3d texture instead of this crap
 
 @export var tex_rect : TextureRect
+@export var bounces : int
+@export var num_ray_per_pix : int
 
 var objects : Array[Node]
 var shadmat
@@ -17,9 +19,9 @@ func _ready():
 	calculate_properties()
 	set_properties()
 	
-func _process(_delta):
-	calculate_properties()
-	set_properties()
+#func _process(_delta):
+#	calculate_properties()
+#	set_properties()
 	
 func calculate_properties():
 	objects = find_children("*", "Sphere", false) 
@@ -50,6 +52,7 @@ func set_properties():
 			shadmat.set_shader_parameter("sphere_emissions", emi_colours)
 		
 		shadmat.set_shader_parameter("sphere_count", len(objects))
-		shadmat.set_shader_parameter("max_bounce", 4)
+		shadmat.set_shader_parameter("max_bounce", bounces)
 		shadmat.set_shader_parameter("sphere_emission_strs", emi_strs)
+		shadmat.set_shader_parameter("num_ray_per_pix", num_ray_per_pix)
 

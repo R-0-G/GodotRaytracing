@@ -4,10 +4,6 @@ class_name Sphere
 
 @export var mesh : MeshInstance3D
 
-@export var colour : Color
-@export var emi_colour : Color
-@export var emi_str : float
-
 func get_info():
 	var mat = mesh.material_override as StandardMaterial3D	
 	var emission_amount = 0

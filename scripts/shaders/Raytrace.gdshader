@@ -15,6 +15,7 @@ uniform float sphere_emission_strs[10];
 uniform float sphere_sizes[10];
 uniform int sphere_count;
 uniform int max_bounce;
+uniform int num_ray_per_pix;
 
 struct Sphere
 {
@@ -117,7 +118,7 @@ float RandomValue(inout uint state)
 {
 	state = state * uint(747796405) + uint(2891336453);
 	uint result = ((state >> ((state >> uint(28)) + uint(4))) ^ state) * uint(277803737);
-	result = (result >> uint(22)) ^ result;
+	result = (result >>uint(22)) ^ result;
 	return float(result) / 4294967295.0;
 }
 
@@ -136,27 +137,52 @@ vec3 RandomDirection(inout uint state)
 	return normalize(vec3(x,y,z));
 }
 
+float random (vec2 uv) {
+    return fract(sin(dot(uv.xy,
+        vec2(12.9898,78.233))) * 43758.5453123);
+}
 
-vec3 BounceRay(vec3 normal, uint rngState)
+vec3 random_vec (vec2 uv) 
+{
+    float x = fract(sin(dot(uv.xy, vec2(12.9898,78.233))) * 43758.5453123);
+	float y = fract(sin(dot(uv.xy, vec2(122.9898,78.233))) * 432758.5453123);
+	float z = fract(sin(dot(uv.xy, vec2(1442.9898,78.233))) * 4344758.5453123);
+	return vec3(x,y,z);
+}
+
+
+vec3 BounceRay(vec3 normal, inout uint rngState)
 {
 	vec3 dir = RandomDirection(rngState);
 	return dir * sign(dot(normal, dir));
 }
 
-vec3 Trace(Ray ray, inout uint rngState)
+vec3 BounceRaySimple(vec3 normal, vec2 uv)
+{
+	vec3 dir = random_vec(uv);
+	return dir * sign(dot(normal, dir));
+}
+
+vec3 Trace(Ray ray, inout uint rngState, vec2 uv)
 {
 	vec3 incomingLight = vec3(0);
 	vec3 rayColour = vec3(1, 1, 1);
 	for (int i=0; i< max_bounce; i++)
 	{
 		HitInfo hit = RayCalc(ray);
+		//return hit.colour.xyz;
 		if (hit.didHit)
 		{
 			ray.origin = hit.hitPoint;
-			ray.dir = BounceRay(hit.normal, rngState);
-			vec3 emittedLight = hit.emissionColour * hit.emissionStrength;
+			vec3 nrm = normalize(hit.normal);
+			//ray.dir = ray.dir - 2.0 * nrm * (dot(ray.dir, nrm)); //reflection
+			ray.dir = BounceRaySimple(hit.normal, uv*float(i+1));
+//			ray.dir = BounceRay(hit.normal, rngState);
+			vec3 emittedLight = hit.emissionColour * clamp(hit.emissionStrength, 0,1);
+//			incomingLight = rayColour;
 			incomingLight += emittedLight * rayColour;
 			rayColour *= hit.colour.rgb;
+			//incomingLight = ray.dir;
 		}
 		else
 		{
@@ -184,8 +210,19 @@ void fragment()
 	vec3 dir = viewPoint-ray.origin; // if you think this isnt working in neg axis how could it display neg cols
 	ray.dir = normalize(dir); //this shouldnt change with linear motion of cam
 	
-	vec3 pixelCol = Trace(ray, rngState);
+	vec3 totalLight = vec3(0);
+	
+	for (int i = 0; i<num_ray_per_pix; i++)
+	{
+		totalLight += Trace(ray, rngState, UV);
+	}
+	
+	vec3 pixelCol = totalLight/float(num_ray_per_pix);
 	COLOR = vec4(pixelCol, 1);
+//	uint test = uint(UV.x);
+//	COLOR = vec4(random_vec(UV), 1);
+//	COLOR = vec4(RandomValue(test));
+	//COLOR = vec4(1);
 
 }
 
