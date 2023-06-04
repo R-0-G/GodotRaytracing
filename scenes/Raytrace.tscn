@@ -46,7 +46,7 @@ expand_mode = 1
 [node name="RaycastManager" type="Node3D" parent="." node_paths=PackedStringArray("tex_rect")]
 script = ExtResource("5_euifv")
 tex_rect = NodePath("../Control/TextureRect")
-bounces = 3
+bounces = 4
 num_ray_per_pix = 100
 
 [node name="GreenSphere" type="Node3D" parent="RaycastManager" node_paths=PackedStringArray("mesh")]

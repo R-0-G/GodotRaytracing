@@ -43,7 +43,7 @@ func _process(delta):
 		var vpg = vp*proj
 		#print(vpg, " : ", Vector3(vpg.x, vpg.y, vpg.z)- glob_pos)
 		
-		shadmat.set_shader_parameter("viewParams",Plane(view_params)) #crap that i have to do this
+		shadmat.set_shader_parameter("frustrum_info",Plane(view_params)) #crap that i have to do this
 		shadmat.set_shader_parameter("cam_local_world", proj)
 		shadmat.set_shader_parameter("world_space_camera_pos", Plane(glob_pos)) #crap that i have to do this
 		

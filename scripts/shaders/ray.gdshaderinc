@@ -13,3 +13,9 @@ struct HitInfo
 	vec3 hitPoint;
 	vec3 normal;
 };
+
+vec3 diffuse_bounce(vec3 normal, inout uint seed)
+{
+	vec3 dir = random_dir_unit_sphere(seed);
+	return dir * sign(dot(normal, dir));
+}

@@ -1,6 +1,6 @@
 //use get_seed and pass into all of these functions
 
-uint get_seed(vec2 screen_pixel_size, vec2 uv)
+uint rand_seed(vec2 screen_pixel_size, vec2 uv)
 {
 	vec2 resolution= 1.0/screen_pixel_size;
 	vec2 pixelCoord = uv * resolution;
