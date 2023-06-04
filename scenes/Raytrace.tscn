@@ -47,7 +47,7 @@ expand_mode = 1
 script = ExtResource("5_euifv")
 tex_rect = NodePath("../Control/TextureRect")
 bounces = 3
-num_ray_per_pix = 2
+num_ray_per_pix = 100
 
 [node name="GreenSphere" type="Node3D" parent="RaycastManager" node_paths=PackedStringArray("mesh")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.100104, -0.183242, -1.55077)
