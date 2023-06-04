@@ -14,3 +14,4 @@ struct MaterialHitInfo
 	HitInfo hit;
 	Material material;
 };
+
