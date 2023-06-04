@@ -89,7 +89,7 @@ void fragment()
 	vec3 light = get_light(ray, seed);
 	
 //	if (frame_count < 100)
-	{
+//	{
 		COLOR = vec4(light, 1.0);
 //	}
 //	else
