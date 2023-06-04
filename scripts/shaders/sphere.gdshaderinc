@@ -19,7 +19,7 @@ struct Sphere
 
 
 
-MaterialHitInfo RaySphere(inout Ray ray, in Sphere sphere)
+MaterialHitInfo get_ray_sphere_hit(inout Ray ray, in Sphere sphere)
 {
 	MaterialHitInfo rayHit;
 	rayHit.hit.didHit = false;
@@ -48,21 +48,4 @@ MaterialHitInfo RaySphere(inout Ray ray, in Sphere sphere)
 	}
 	
 	return rayHit;
-}
-
-MaterialHitInfo[MAX_SPHERE_COUNT] get_sphere_hits(Ray ray)
-{
-	MaterialHitInfo[MAX_SPHERE_COUNT] result;
-	for (int i = 0; i<sphere_count; i++)
-	{
-		vec3 pos = sphere_locations[i];
-		float rad = sphere_sizes[i];
-		vec4 col = vec4(sphere_colours[i], 1);
-		vec3 emi_col = sphere_emissions[i].rgb;
-		float emi_str = sphere_emission_strs[i];
-		Sphere sphere = Sphere(pos,rad,Material(col, emi_col, emi_str));
-		
-		result[i] = RaySphere(ray, sphere);
-	}
-	return result;
 }

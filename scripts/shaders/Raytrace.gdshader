@@ -14,11 +14,17 @@ MaterialHitInfo RayCalc(inout Ray ray)
 	MaterialHitInfo rayHit;
 	rayHit.hit.didHit = false; //this needs to be set as I think it defaults to true? weird
 	
-	MaterialHitInfo[] spheres = get_sphere_hits(ray);
-	
-	for (int i = 0; i<spheres.length(); i++)
+	for (int i = 0; i<sphere_count; i++)
 	{
-		MaterialHitInfo hit = spheres[i];
+		vec3 pos = sphere_locations[i];
+		float rad = sphere_sizes[i];
+		vec4 col = vec4(sphere_colours[i], 1);
+		vec3 emi_col = sphere_emissions[i].rgb;
+		float emi_str = sphere_emission_strs[i];
+		Sphere sphere = Sphere(pos,rad,Material(col, emi_col, emi_str));
+
+	
+		MaterialHitInfo hit = get_ray_sphere_hit(ray, sphere);
 		if (hit.hit.dst < rayHit.hit.dst || rayHit.hit.didHit == false)
 		{
 			if (hit.hit.didHit)

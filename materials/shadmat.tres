@@ -4,3 +4,15 @@
 
 [resource]
 shader = ExtResource("1_bksnj")
+shader_parameter/object_count = null
+shader_parameter/sphere_locations = null
+shader_parameter/sphere_colours = null
+shader_parameter/sphere_emissions = null
+shader_parameter/sphere_emission_strs = null
+shader_parameter/sphere_sizes = null
+shader_parameter/sphere_count = null
+shader_parameter/frustrum_info = null
+shader_parameter/cam_local_world = null
+shader_parameter/world_space_camera_pos = null
+shader_parameter/max_bounce = null
+shader_parameter/num_ray_per_pix = null
