@@ -1,4 +1,6 @@
-shader_type canvas_item;
+shader_type spatial;
+
+render_mode depth_draw_opaque;
 
 #include "res://scripts/shaders/random.gdshaderinc"
 #include "res://scripts/shaders/ray.gdshaderinc"
@@ -10,7 +12,8 @@ uniform int max_bounce;
 uniform int num_ray_per_pix;
 uniform int sphere_count;
 uniform int frame_count;
-uniform sampler2D tex : hint_screen_texture;//, filter_linear_mipmap;
+uniform vec2 screen_pixel_size;
+uniform sampler2D tex : hint_screen_texture, filter_linear_mipmap;
 
 
 
@@ -55,6 +58,7 @@ vec3 get_ray_light(Ray ray, inout uint seed)
 			ray.origin = hit.hit.hitPoint;
 			vec3 nrm = normalize(hit.hit.normal);
 			ray.dir = diffuse_bounce(hit.hit.normal, seed);
+//			ray.dir = reflect( ray.dir, hit.hit.normal)
 			vec3 emittedLight = hit.material.emissionColour * hit.material.emissionStrength;
 			incomingLight += emittedLight * rayColour;
 			rayColour *= hit.material.colour.rgb;
@@ -84,21 +88,32 @@ vec3 get_light(Ray ray, uint seed)
 void fragment() 
 {
 	vec4 prev_col = textureLod(tex, SCREEN_UV, 0.0);
-	Ray ray = pixel_to_ray(UV);
-	uint seed = rand_seed(SCREEN_PIXEL_SIZE, UV);
+	Ray ray = pixel_to_ray(SCREEN_UV);
+	uint seed = rand_seed_reso(screen_pixel_size, UV);
 	vec3 light = get_light(ray, seed);
 	
 	if (frame_count < 100)
 	{
-		COLOR = vec4(light, 1.0);
+		ALBEDO = light;
 	}
 	else
 	{
-		COLOR = prev_col;
+		ALBEDO = prev_col.rgb;
+//		float weight = 1.0 / float(frame_count+1);
+//		ALBEDO = (prev_col * (1.0-weight) + vec4(light, 1.0) * weight).rgb;
 	}
 	
-//	float weight = 1.0 / float(frame_count+1);
-//	COLOR = prev_col * (1.0-weight) + vec4(light, 1.0) * weight;
+//	if (frame_count == 0)
+//	{
+//		ALBEDO = light;
+//	}
+//	else
+//	{
+//		float weight = 1.0 / float(frame_count+1);
+//		ALBEDO = (prev_col * (1.0-weight) + vec4(light, 1.0) * weight).rgb;
+//	}
+	
+	
 	
 	
 }

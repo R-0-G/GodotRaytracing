@@ -7,6 +7,12 @@ uint rand_seed(vec2 screen_pixel_size, vec2 uv)
 	return uint(pixelCoord.y * resolution.x + pixelCoord.x);
 }
 
+uint rand_seed_reso(vec2 reso, vec2 uv)
+{
+	vec2 pixelCoord = uv * reso;
+	return uint(pixelCoord.y * reso.x + pixelCoord.x);
+}
+
 float rand_value(inout uint seed)
 {
 	seed = seed * uint(747796405) + uint(2891336453);

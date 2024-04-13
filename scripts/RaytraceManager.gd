@@ -3,7 +3,7 @@ extends Node
 #use 3d texture instead of this crap
 
 @export var tex_rect : TextureRect
-#@export var tex_rect2 : TextureRect
+@export var quad : MeshInstance3D
 @export var bounces : int
 @export var num_ray_per_pix : int
 
@@ -43,7 +43,8 @@ func calculate_properties():
 		emi_colours.append(Vector3(data[3].r, data[3].g, data[3].b))
 		emi_strs.append(data[4])
 	
-	shadmat = (tex_rect.material as ShaderMaterial)
+#	shadmat = (tex_rect.material as ShaderMaterial)
+	shadmat = quad.get_active_material(0) as ShaderMaterial
 	
 
 

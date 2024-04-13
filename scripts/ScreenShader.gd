@@ -2,6 +2,7 @@ extends Node3D
 
 #@export var shader : Shader 
 @export var tex_rect : TextureRect
+@export var quad : MeshInstance3D
 @export var trg : Node3D
 @export var matty : Transform3D
 @export var projjy : Projection
@@ -13,7 +14,8 @@ var cam : Camera3D
 
 func _ready():
 	viewport = get_viewport()
-	shadmat = (tex_rect.material as ShaderMaterial)
+#	shadmat = (tex_rect.material as ShaderMaterial)
+	shadmat = quad.get_active_material(0) as ShaderMaterial
 	cam = $Camera3D
 
 func _process(delta):
@@ -25,7 +27,7 @@ func _process(delta):
 		#var near_plane =  cam.get_frustum()[0]
 		var near = $Camera3D.near
 		var plane_height = near * tan( deg_to_rad($Camera3D.fov * 0.5 )) * 2
-		var aspect = DisplayServer.window_get_size().aspect()
+		var aspect = size.aspect()
 		var plane_width = plane_height * aspect
 		var view_params = Vector3(plane_width, plane_height, near)
 #		print(view_params)
@@ -46,6 +48,7 @@ func _process(delta):
 		shadmat.set_shader_parameter("frustrum_info",Plane(view_params)) #crap that i have to do this
 		shadmat.set_shader_parameter("cam_local_world", proj)
 		shadmat.set_shader_parameter("world_space_camera_pos", Plane(glob_pos)) #crap that i have to do this
+		shadmat.set_shader_parameter("screen_pixel_size", Vector2(size.x,size.y)) #crap that i have to do this
 		
 #	print(shadmat.get_shader_parameter("time"))
 #	shader.set set_uniform("time", )
