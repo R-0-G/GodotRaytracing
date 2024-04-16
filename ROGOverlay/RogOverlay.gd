@@ -1,8 +1,12 @@
 @tool
 extends EditorPlugin
 
-var box_instance
-@onready var box_mesh = BoxMesh.new()
+var render_quad
+@onready var overlay = ColorRect.new()
+@onready var box_mesh = QuadMesh.new()
+#@onready var material = ShaderMaterial.new()
+#@onready var shader = preload("res://addons/ROGodot/ROGOverlay/Overlay.gdshader")
+
 
 var but : MenuButton
 func _enter_tree():
@@ -10,17 +14,17 @@ func _enter_tree():
 	
 func cam_test():
 	var viewport = get_editor_interface().get_editor_viewport_3d()
-	if viewport.get_camera_3d().fov == 90:
-		viewport.get_camera_3d().fov = 70
-	else:
-		viewport.get_camera_3d().fov = 90
+	var cam = viewport.get_camera_3d()
+	
+	#material.shader=shader
 	
 	var rs = RenderingServer
-	box_instance = rs.instance_create()
-	rs.instance_set_base(box_instance, box_mesh)
-	rs.instance_set_scenario(box_instance, viewport.get_camera_3d().get_world_3d().scenario)
+	render_quad = rs.instance_create()
+	rs.instance_set_base(render_quad, box_mesh)
+	#rs.instance_geometry_set_material_override(render_quad, material)
+	rs.instance_set_scenario(render_quad, cam.get_world_3d().scenario)
 	var trans = Transform3D(Basis.IDENTITY, Vector3.ZERO)
-	rs.instance_set_transform(box_instance, trans)
+	rs.instance_set_transform(render_quad, cam.transform)
 		
 	#var tex = viewport.get_texture()
 	#tex.draw()

@@ -1,0 +1,6 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://byu6i376mjn2d"]
+
+[ext_resource type="Shader" path="res://addons/ROGodot/ROGOverlay/CanvasOverlay.gdshader" id="1_logwo"]
+
+[resource]
+shader = ExtResource("1_logwo")
