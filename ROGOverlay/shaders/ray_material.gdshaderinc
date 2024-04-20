@@ -1,4 +1,4 @@
-#include "res://scripts/shaders/ray.gdshaderinc"
+#include "res://addons/ROGodot/ROGOverlay/shaders/ray.gdshaderinc"
 
 uniform int object_count;
 

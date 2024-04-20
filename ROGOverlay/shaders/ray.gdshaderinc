@@ -1,4 +1,4 @@
-#include "res://scripts/shaders/random.gdshaderinc"
+#include "res://addons/ROGodot/ROGOverlay/shaders/random.gdshaderinc"
 
 struct Ray 
 {

@@ -2,11 +2,11 @@ shader_type spatial;
 
 render_mode depth_draw_opaque;
 
-#include "res://scripts/shaders/random.gdshaderinc"
-#include "res://scripts/shaders/ray.gdshaderinc"
-#include "res://scripts/shaders/ray_material.gdshaderinc"
-#include "res://scripts/shaders/sphere.gdshaderinc"
-#include "res://scripts/shaders/camera.gdshaderinc"
+#include "res://addons/ROGodot/ROGOverlay/shaders/random.gdshaderinc"
+#include "res://addons/ROGodot/ROGOverlay/shaders/ray.gdshaderinc"
+#include "res://addons/ROGodot/ROGOverlay/shaders/ray_material.gdshaderinc"
+#include "res://addons/ROGodot/ROGOverlay/shaders/sphere.gdshaderinc"
+#include "res://addons/ROGodot/ROGOverlay/shaders/camera.gdshaderinc"
 
 uniform int max_bounce;
 uniform int num_ray_per_pix;

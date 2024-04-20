@@ -1,4 +1,4 @@
-#include "res://scripts/shaders/ray.gdshaderinc"
+#include "res://addons/ROGodot/ROGOverlay/shaders/ray.gdshaderinc"
 
 uniform vec4 frustrum_info; //send over a Plane() NOT a vector. 3 params should be near clip plane's width, height and distance from cam
 uniform mat4 cam_local_world; //this needs a Projection() not a Transform3D. All w components need to be the position of the item. w vector should be 0

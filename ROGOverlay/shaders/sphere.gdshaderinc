@@ -1,5 +1,5 @@
-#include "res://scripts/shaders/ray_material.gdshaderinc"
-#include "res://scripts/shaders/ray.gdshaderinc"
+#include "res://addons/ROGodot/ROGOverlay/shaders/ray_material.gdshaderinc"
+#include "res://addons/ROGodot/ROGOverlay/shaders/ray.gdshaderinc"
 
 #define MAX_SPHERE_COUNT 10
 
