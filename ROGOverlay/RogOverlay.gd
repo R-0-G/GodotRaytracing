@@ -4,6 +4,19 @@ extends EditorPlugin
 @onready var overlay = ColorRect.new()
 @onready var material = preload("res://addons/ROGodot/ROGOverlay/CanvasOverlayMaterial.tres")
 @onready var mat = preload("res://funmat.tres")
+var bounces =2
+var num_ray_per_pix =10
+
+var frame_count = 0
+
+var objects : Array[Node]
+var shadmat
+var locations : Array[Vector3]
+var sizes : Array[float]
+var colours : Array[Vector3]
+var emi_colours : Array[Vector3]
+var emi_strs : Array[float]
+
 
 var is_active = false
 var cam : Camera3D
@@ -29,32 +42,81 @@ func _process(delta):
 		timer=0
 		
 	if is_active:
-		if tex!=null:
-			mat.albedo_texture = tex
-			material.set_shader_parameter("last_tex", tex)
+		#if tex!=null:
+			#mat.albedo_texture = tex
+			#material.set_shader_parameter("last_tex", tex)
 		
-		material.set_shader_parameter("cam_forward", cam.basis.z )
-		material.set_shader_parameter("cam_pos", cam.position )
-		material.set_shader_parameter("cam_fov", cam.fov )
-		material.set_shader_parameter("cam_near", cam.near )
-		material.set_shader_parameter("cam_far", cam.far )
-		#tex=cam.get_viewport().get_texture()
-		var img = overlay.get_viewport().get_texture().get_image()
-		tex = ImageTexture.create_from_image(img)
+		var size = DisplayServer.window_get_size()
+		#var near_plane =  cam.get_frustum()[0]
+		var near = cam.near
+		var plane_height = near * tan( deg_to_rad(cam.fov * 0.5 )) * 2
+		var aspect = size.aspect()
+		var plane_width = plane_height * aspect
+		var view_params = Vector3(plane_width, plane_height, near)
+
+		var glob_pos = cam.get_global_position()
+		var mat = cam.transform
+		#matty = mat.affine_inverse()
+		#var proj = Projection(mat.affine_inverse())
+		var proj = Projection(mat)
+		proj.x.w = cam.global_position.x
+		proj.y.w = cam.global_position.y
+		proj.z.w = cam.global_position.z #crap that i have to do this
+		proj.w = Vector4.ZERO
+		#projjy = proj
+#		
+		#var vp = Vector4(0.0,0.0,1.0, 1.0)
+		#var vpg = vp*proj
+		#print(vpg, " : ", Vector3(vpg.x, vpg.y, vpg.z)- glob_pos)
 		
-		#https://github.com/godotengine/godot/pull/79288
-		#var rd = RenderingServer.get_rendering_device()
-		#var root = get_tree().edited_scene_root
-		#var tex_data = rd.texture_get_data()
-		#print(root.name + "rt")
-		#var current = root.get_child(0) as MeshInstance3D
-		#print(current.name)
-		#var mat = current.get_surface_override_material(0) as StandardMaterial3D
+		material.set_shader_parameter("frustrum_info",Plane(view_params)) #crap that i have to do this
+		material.set_shader_parameter("cam_local_world", proj)
+		material.set_shader_parameter("world_space_camera_pos", Plane(glob_pos)) #crap that i have to do this
+		material.set_shader_parameter("screen_pixel_size", Vector2(size.x,size.y)) #crap that i have to do this
+		#var img = overlay.get_viewport().get_texture().get_image()
+		#tex = ImageTexture.create_from_image(img)
+		
+
+
+	
+func calculate_properties():
+	objects = get_tree().edited_scene_root.find_children("*", "Sphere", false)
+	print ("objs: "+ str(len(objects)))
+	
+	for obj in objects:
+		var sp = obj as Sphere
+		var data = sp.get_info_sp()
+		locations.append(data[0])
+		sizes.append(data[1])
+		colours.append(Vector3(data[2].r, data[2].g, data[2].b))
+		emi_colours.append(Vector3(data[3].r, data[3].g, data[3].b))
+		emi_strs.append(data[4])
+
 	
 
 
+
+
+func set_properties():
+	if material!=null:
+		if locations != null:
+			material.set_shader_parameter("sphere_locations", locations ) 
+		if sizes != null:
+			material.set_shader_parameter("sphere_sizes", sizes ) 
+		if colours != null:
+			material.set_shader_parameter("sphere_colours", colours ) 
+		if emi_colours != null:
+			material.set_shader_parameter("sphere_emissions", emi_colours)
+		
+		material.set_shader_parameter("sphere_count", len(objects))
+		material.set_shader_parameter("object_count", len(objects))
+		material.set_shader_parameter("max_bounce", bounces)
+		material.set_shader_parameter("sphere_emission_strs", emi_strs)
+		material.set_shader_parameter("num_ray_per_pix", num_ray_per_pix)
 	
 func set_active(active):
+	calculate_properties()
+	set_properties()
 	is_active=active
 	var viewport = get_editor_interface().get_editor_viewport_3d()
 	#viewport.render_target_clear_mode=SubViewport.CLEAR_MODE_NEVER
