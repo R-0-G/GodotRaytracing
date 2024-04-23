@@ -14,7 +14,7 @@ func _enter_tree():
 	pop.add_item("Add Null")
 	
 	pop.id_pressed.connect(add_primitive)
-	but.text = "Add"
+	but.text = "AddGd"
 	but.toggle_mode=true
 	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, but)
 	
