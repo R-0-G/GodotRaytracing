@@ -38,11 +38,24 @@ material = SubResource("ShaderMaterial_yyuon")
 [sub_resource type="SphereMesh" id="SphereMesh_xd256"]
 material = ExtResource("8_mp00b")
 
-[node name="Node3D" type="Node3D" node_paths=PackedStringArray("tex_rect", "quad", "trg")]
+[node name="Raytrace" type="Node3D" node_paths=PackedStringArray("tex_rect", "quad", "trg")]
 script = ExtResource("1_flkgu")
 tex_rect = NodePath("Control/Raytrace")
 quad = NodePath("Camera3D/MeshInstance3D")
 trg = NodePath("RaycastManager/GreenSphere")
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("11_7ntn6")
+
+[node name="FPSText" type="RichTextLabel" parent="HUD"]
+layout_mode = 0
+offset_right = 319.0
+offset_bottom = 128.0
+text = "lkwjhflkadsjhfla"
 
 [node name="Camera3D" type="Camera3D" parent="."]
 cull_mask = 1048574
@@ -90,8 +103,8 @@ expand_mode = 1
 script = ExtResource("5_euifv")
 tex_rect = NodePath("../Control/Raytrace")
 quad = NodePath("../Camera3D/MeshInstance3D")
-bounces = 4
-num_ray_per_pix = 50
+bounces = 3
+num_ray_per_pix = 10
 
 [node name="GreenSphere" type="Node3D" parent="RaycastManager" node_paths=PackedStringArray("mesh")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.100104, -0.183242, -1.55077)
@@ -137,6 +150,3 @@ mesh = NodePath("MeshInstance3D")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RaycastManager/LightSphere"]
 material_override = ExtResource("8_mp00b")
 mesh = SubResource("SphereMesh_xd256")
-
-[node name="FPSTitle" type="Node" parent="."]
-script = ExtResource("11_7ntn6")

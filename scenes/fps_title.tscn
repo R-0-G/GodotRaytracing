@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://ep1mus0q04lg"]
-
-[ext_resource type="Script" uid="uid://bi2hqwayys7fn" path="res://scripts/fps_title.gd" id="1_2jffn"]
-
-[node name="FPSTitle" type="Node"]
-script = ExtResource("1_2jffn")
