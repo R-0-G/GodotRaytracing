@@ -1,7 +1,5 @@
 extends Node
 
-#use 3d texture instead of this crap
-
 @export var tex_rect : TextureRect
 @export var quad : MeshInstance3D
 @export var bounces : int
@@ -17,7 +15,6 @@ var colours : Array[Vector3]
 var emi_colours : Array[Vector3]
 var emi_strs : Array[float]
 
-
 func _ready():
 	calculate_properties()
 	set_properties()
@@ -25,13 +22,7 @@ func _ready():
 func _process(_delta):
 	shadmat.set_shader_parameter("frame_count", frame_count)
 	frame_count+=1
-#	tex_rect2.texture = tex_rect.texture
-#	pass
-	#get current texture on raycast texture
-	#
-#	calculate_properties()
-#	set_properties()
-	
+
 func calculate_properties():
 	objects = find_children("*", "Sphere", false) 
 	
@@ -42,8 +33,7 @@ func calculate_properties():
 		colours.append(Vector3(data[2].r, data[2].g, data[2].b))
 		emi_colours.append(Vector3(data[3].r, data[3].g, data[3].b))
 		emi_strs.append(data[4])
-	
-#	shadmat = (tex_rect.material as ShaderMaterial)
+
 	shadmat = quad.get_active_material(0) as ShaderMaterial
 	
 
@@ -66,4 +56,3 @@ func set_properties():
 		shadmat.set_shader_parameter("max_bounce", bounces)
 		shadmat.set_shader_parameter("sphere_emission_strs", emi_strs)
 		shadmat.set_shader_parameter("num_ray_per_pix", num_ray_per_pix)
-

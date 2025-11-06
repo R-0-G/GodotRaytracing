@@ -1,34 +1,34 @@
 [gd_scene load_steps=16 format=3 uid="uid://cx228q1nfrov"]
 
-[ext_resource type="Script" path="res://scripts/ScreenShader.gd" id="1_flkgu"]
+[ext_resource type="Script" uid="uid://em2yg6ukeg4a" path="res://scripts/screen_shader.gd" id="1_flkgu"]
 [ext_resource type="Material" uid="uid://dd4xtjegjoumm" path="res://materials/shadmat.tres" id="2_133wf"]
-[ext_resource type="Script" path="res://scripts/MoveCamera.cs" id="2_l5c2i"]
-[ext_resource type="Shader" path="res://scripts/shaders/RaytraceSpatial.gdshader" id="3_2xyh4"]
-[ext_resource type="Script" path="res://scripts/RaytraceManager.gd" id="5_euifv"]
-[ext_resource type="Script" path="res://scripts/Sphere.gd" id="6_a7t8k"]
+[ext_resource type="Script" uid="uid://dwmeralgg0cl7" path="res://scripts/move_camera.gd" id="2_l5c2i"]
+[ext_resource type="Shader" uid="uid://83sswmgjdpu3" path="res://scripts/shaders/RaytraceSpatial.gdshader" id="3_2xyh4"]
+[ext_resource type="Script" uid="uid://brirl58kn65oj" path="res://scripts/raytrace_manager.gd" id="5_euifv"]
+[ext_resource type="Script" uid="uid://ni5ffiyy3amp" path="res://scripts/sphere.gd" id="6_a7t8k"]
 [ext_resource type="Material" uid="uid://ctn3g23e11qlo" path="res://materials/green_unlit.tres" id="7_mjt24"]
 [ext_resource type="Material" uid="uid://cfwv78ojoo0sc" path="res://materials/yellow_lit.tres" id="8_mp00b"]
 [ext_resource type="Material" uid="uid://c1wlju4ea6pb" path="res://materials/blue_unlit.tres" id="9_4ichn"]
 [ext_resource type="Material" uid="uid://siww64pwxho4" path="res://materials/dark_blue_unlit.tres" id="9_p7iy8"]
-[ext_resource type="Script" path="res://scripts/FPSTitle.gd" id="11_7ntn6"]
+[ext_resource type="Script" uid="uid://bi2hqwayys7fn" path="res://scripts/fps_title.gd" id="11_7ntn6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yyuon"]
 render_priority = 0
 shader = ExtResource("3_2xyh4")
-shader_parameter/object_count = null
+shader_parameter/object_count = 0
 shader_parameter/sphere_locations = PackedVector3Array()
 shader_parameter/sphere_colours = PackedVector3Array()
 shader_parameter/sphere_emissions = PackedVector3Array()
-shader_parameter/sphere_emission_strs = null
-shader_parameter/sphere_sizes = null
-shader_parameter/frustrum_info = null
-shader_parameter/cam_local_world = null
-shader_parameter/world_space_camera_pos = null
-shader_parameter/max_bounce = null
-shader_parameter/num_ray_per_pix = null
-shader_parameter/sphere_count = null
-shader_parameter/frame_count = null
-shader_parameter/screen_pixel_size = null
+shader_parameter/sphere_emission_strs = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/sphere_sizes = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/frustrum_info = Vector4(0, 0, 0, 0)
+shader_parameter/cam_local_world = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/world_space_camera_pos = Vector4(0, 0, 0, 0)
+shader_parameter/max_bounce = 0
+shader_parameter/num_ray_per_pix = 0
+shader_parameter/sphere_count = 0
+shader_parameter/frame_count = 0
+shader_parameter/screen_pixel_size = Vector2(0, 0)
 
 [sub_resource type="QuadMesh" id="QuadMesh_tdmmt"]
 material = SubResource("ShaderMaterial_yyuon")
@@ -49,6 +49,8 @@ cull_mask = 1048574
 current = true
 fov = 90.0
 script = ExtResource("2_l5c2i")
+move_speed = 0.8
+accel = 1.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)

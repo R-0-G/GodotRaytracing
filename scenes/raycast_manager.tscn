@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://dw6360vjb5wp4"]
 
-[ext_resource type="Script" path="res://scripts/RaytraceManager.gd" id="1_eitac"]
-[ext_resource type="Script" path="res://scripts/Sphere.gd" id="2_e2v74"]
+[ext_resource type="Script" uid="uid://brirl58kn65oj" path="res://scripts/raytrace_manager.gd" id="1_eitac"]
+[ext_resource type="Script" uid="uid://ni5ffiyy3amp" path="res://scripts/sphere.gd" id="2_e2v74"]
 [ext_resource type="Material" uid="uid://ctn3g23e11qlo" path="res://materials/green_unlit.tres" id="3_mnid2"]
 [ext_resource type="Material" uid="uid://cfwv78ojoo0sc" path="res://materials/yellow_lit.tres" id="4_22spq"]
 [ext_resource type="Material" uid="uid://c1wlju4ea6pb" path="res://materials/blue_unlit.tres" id="5_kfpih"]
