@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dd4xtjegjoumm"]
 
-[ext_resource type="Shader" path="res://scripts/shaders/Raytrace.gdshader" id="1_bksnj"]
+[ext_resource type="Shader" uid="uid://bm4w03ades84y" path="res://scripts/shaders/raytrace.gdshader" id="1_bksnj"]
 
 [resource]
 shader = ExtResource("1_bksnj")

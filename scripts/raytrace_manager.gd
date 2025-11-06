@@ -5,7 +5,7 @@ extends Node
 @export var num_ray_per_pix : int
 
 var objects : Array[Node]
-var shadmat
+var shadmat : ShaderMaterial
 var locations : Array[Vector3]
 var sizes : Array[float]
 var colours : Array[Vector3]

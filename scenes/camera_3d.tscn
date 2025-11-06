@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dft3uj08y2gnl"]
 
-[ext_resource type="Shader" path="res://scripts/shaders/RaytraceSpatial.gdshader" id="2_nenx7"]
+[ext_resource type="Shader" uid="uid://83sswmgjdpu3" path="res://scripts/shaders/raytrace_spatial.gdshader" id="2_nenx7"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yyuon"]
 render_priority = 0

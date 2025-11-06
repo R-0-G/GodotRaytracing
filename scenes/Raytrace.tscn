@@ -2,14 +2,14 @@
 
 [ext_resource type="Script" uid="uid://em2yg6ukeg4a" path="res://scripts/screen_shader.gd" id="1_flkgu"]
 [ext_resource type="Script" uid="uid://dwmeralgg0cl7" path="res://scripts/move_camera.gd" id="2_l5c2i"]
-[ext_resource type="Shader" uid="uid://83sswmgjdpu3" path="res://scripts/shaders/RaytraceSpatial.gdshader" id="3_2xyh4"]
+[ext_resource type="Shader" uid="uid://83sswmgjdpu3" path="res://scripts/shaders/raytrace_spatial.gdshader" id="3_2xyh4"]
 [ext_resource type="Script" uid="uid://brirl58kn65oj" path="res://scripts/raytrace_manager.gd" id="5_euifv"]
 [ext_resource type="Script" uid="uid://ni5ffiyy3amp" path="res://scripts/sphere.gd" id="6_a7t8k"]
 [ext_resource type="Material" uid="uid://ctn3g23e11qlo" path="res://materials/green_unlit.tres" id="7_mjt24"]
 [ext_resource type="Material" uid="uid://cfwv78ojoo0sc" path="res://materials/yellow_lit.tres" id="8_mp00b"]
 [ext_resource type="Material" uid="uid://c1wlju4ea6pb" path="res://materials/blue_unlit.tres" id="9_4ichn"]
 [ext_resource type="Material" uid="uid://siww64pwxho4" path="res://materials/dark_blue_unlit.tres" id="9_p7iy8"]
-[ext_resource type="Script" uid="uid://bi2hqwayys7fn" path="res://scripts/fps_title.gd" id="11_7ntn6"]
+[ext_resource type="Script" uid="uid://bi2hqwayys7fn" path="res://scripts/fps_counter.gd" id="11_7ntn6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yyuon"]
 render_priority = 0
@@ -35,10 +35,9 @@ material = SubResource("ShaderMaterial_yyuon")
 [sub_resource type="SphereMesh" id="SphereMesh_xd256"]
 material = ExtResource("8_mp00b")
 
-[node name="Raytrace" type="Node3D" node_paths=PackedStringArray("quad", "trg")]
+[node name="Raytrace" type="Node3D" node_paths=PackedStringArray("quad")]
 script = ExtResource("1_flkgu")
 quad = NodePath("Camera3D/MeshInstance3D")
-trg = NodePath("RaycastManager/GreenSphere")
 
 [node name="HUD" type="Control" parent="."]
 layout_mode = 3
