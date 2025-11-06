@@ -9,7 +9,6 @@ shader_type canvas_item;
 uniform int max_bounce;
 uniform int num_ray_per_pix;
 uniform int sphere_count;
-uniform int frame_count;
 uniform sampler2D tex : hint_screen_texture;//, filter_linear_mipmap;
 
 
@@ -28,7 +27,6 @@ MaterialHitInfo get_ray_hit(inout Ray ray)
 		{		
 			hit = get_sphere_index_hit(ray, i);
 		}
-		//if i<tri_count, hit = get_tri_hit(ray, tri)
 		
 		if (hit.hit.dst < rayHit.hit.dst || rayHit.hit.didHit == false)
 		{
@@ -88,18 +86,6 @@ void fragment()
 	uint seed = rand_seed(SCREEN_PIXEL_SIZE, UV);
 	vec3 light = get_light(ray, seed);
 	
-	if (frame_count < 100)
-	{
-		COLOR = vec4(light, 1.0);
-	}
-	else
-	{
-		COLOR = prev_col;
-	}
-	
-//	float weight = 1.0 / float(frame_count+1);
-//	COLOR = prev_col * (1.0-weight) + vec4(light, 1.0) * weight;
-	
-	
+	COLOR = prev_col;
 }
 

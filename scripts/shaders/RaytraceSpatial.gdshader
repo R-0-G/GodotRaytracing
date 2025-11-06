@@ -31,7 +31,6 @@ MaterialHitInfo get_ray_hit(inout Ray ray)
 		{		
 			hit = get_sphere_index_hit(ray, i);
 		}
-		//if i<tri_count, hit = get_tri_hit(ray, tri)
 		
 		if (hit.hit.dst < rayHit.hit.dst || rayHit.hit.didHit == false)
 		{
@@ -99,22 +98,6 @@ void fragment()
 	else
 	{
 		ALBEDO = prev_col.rgb;
-//		float weight = 1.0 / float(frame_count+1);
-//		ALBEDO = (prev_col * (1.0-weight) + vec4(light, 1.0) * weight).rgb;
 	}
-	
-//	if (frame_count == 0)
-//	{
-//		ALBEDO = light;
-//	}
-//	else
-//	{
-//		float weight = 1.0 / float(frame_count+1);
-//		ALBEDO = (prev_col * (1.0-weight) + vec4(light, 1.0) * weight).rgb;
-//	}
-	
-	
-	
-	
 }
 

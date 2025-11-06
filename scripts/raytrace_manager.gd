@@ -4,8 +4,6 @@ extends Node
 @export var bounces : int
 @export var num_ray_per_pix : int
 
-var frame_count = 0
-
 var objects : Array[Node]
 var shadmat
 var locations : Array[Vector3]
@@ -17,10 +15,6 @@ var emi_strs : Array[float]
 func _ready():
 	calculate_properties()
 	set_properties()
-	
-func _process(_delta):
-	shadmat.set_shader_parameter("frame_count", frame_count)
-	frame_count+=1
 
 func calculate_properties():
 	objects = find_children("*", "Sphere", false) 
