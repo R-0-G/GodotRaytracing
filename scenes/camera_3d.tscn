@@ -1,6 +1,5 @@
-[gd_scene load_steps=5 format=3 uid="uid://bbt5c3p415xp3"]
+[gd_scene load_steps=4 format=3 uid="uid://dft3uj08y2gnl"]
 
-[ext_resource type="Script" path="res://scripts/MoveCamera.cs" id="1_hckqs"]
 [ext_resource type="Shader" path="res://scripts/shaders/RaytraceSpatial.gdshader" id="2_nenx7"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yyuon"]
@@ -28,7 +27,6 @@ material = SubResource("ShaderMaterial_yyuon")
 cull_mask = 1048574
 current = true
 fov = 90.0
-script = ExtResource("1_hckqs")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
