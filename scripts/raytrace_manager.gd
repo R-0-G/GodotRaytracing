@@ -1,6 +1,5 @@
 extends Node
 
-@export var tex_rect : TextureRect
 @export var quad : MeshInstance3D
 @export var bounces : int
 @export var num_ray_per_pix : int
@@ -36,10 +35,6 @@ func calculate_properties():
 
 	shadmat = quad.get_active_material(0) as ShaderMaterial
 	
-
-
-
-
 func set_properties():
 	if shadmat!=null:
 		if locations != null:

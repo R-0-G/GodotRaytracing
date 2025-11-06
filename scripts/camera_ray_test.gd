@@ -1,13 +1,11 @@
 extends Node
 
-# https://www.youtube.com/watch?v=Qz0KTGYJtUk
-
 @export var debug_point_count : Vector2i = Vector2i(16,16)
 @export var camera_arrow : PackedScene
 
 var arrow_dict : Dictionary
 
-func test(p):
+func test(_p):
 	if $Camera3D==null:
 		return
 	var plane_height = $Camera3D.near * tan( deg_to_rad($Camera3D.fov * 0.5 )) * 2
@@ -26,20 +24,15 @@ func test(p):
 			var vec = Vector2i(x,y)
 			
 			draw_point(vec,point)
-# Called when the node enters the scene tree for the first time.
+
 func draw_point(vec,point):
 	if !arrow_dict.has(vec):
 		var arr =camera_arrow.instantiate()
 		arrow_dict[vec] = arr
-		var cam = $Camera3D
-#		print(cam, " ", arr)
-#		cam.add_child(arr)
 	arrow_dict[vec].position = point
 			
 func _ready():
 	test(true)
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	test(false)
