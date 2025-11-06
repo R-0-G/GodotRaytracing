@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://6ap0guwt0jue"]
+
+[ext_resource type="Script" uid="uid://em2yg6ukeg4a" path="res://scripts/ScreenShader.gd" id="1_hukxd"]
+[ext_resource type="PackedScene" uid="uid://ep1mus0q04lg" path="res://scenes/fps_title.tscn" id="2_2wl4f"]
+[ext_resource type="PackedScene" uid="uid://dl1igkwgng3pw" path="res://scenes/control.tscn" id="3_3fuh0"]
+[ext_resource type="PackedScene" uid="uid://dw6360vjb5wp4" path="res://scenes/raycast_manager.tscn" id="4_ffnx0"]
+
+[node name="RaycastNew" type="Node3D"]
+script = ExtResource("1_hukxd")
+
+[node name="FPSTitle" parent="." instance=ExtResource("2_2wl4f")]
+
+[node name="Control" parent="." instance=ExtResource("3_3fuh0")]
+
+[node name="RaycastManager" parent="." instance=ExtResource("4_ffnx0")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+
+[editable path="FPSTitle"]
+[editable path="Control"]
+[editable path="RaycastManager"]
